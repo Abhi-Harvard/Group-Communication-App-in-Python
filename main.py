@@ -77,34 +77,61 @@ Builder.load_string("""
         BoxLayout:
             orientation: 'vertical'
 
-            GridLayout:
-                Label:
-                    text: 'Server:'
-                    halign: 'left'
-                    size_hint: (0.4, 1)
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: "data/background.jpg"
 
+            FloatLayout:
+                canvas:
+                    Ellipse:
+                        id: user_picture
+                        pos: root.width/2 - 150/2, self.height/2 - 150/2 + 150*1.5
+                        size: 150, 150
+                        source: 'data/gcomm-logo.png'
+                        angle_start: 0
+                        angle_end: 360
+                    
                 TextInput:
                     id: server
+                    hint_text: "Server IP"
+                    size_hint: (3.9/6.8, 1/12)
+                    pos_hint: {'center_x': 0.5, 'y': 0.47}
+                    background_normal: 'data/input_line.png'
+                    background_active: 'data/white.png'
                     text: app.host
-
-                Label:
-                    text: 'Nickname:'
-                    halign: 'left'
-                    size_hint: (0.4, 1)
 
                 TextInput:
                     id: nickname
+                    hint_text: "Nickname"
+                    size_hint: (3.9/6.8, 1/12)
+                    pos_hint: {'center_x': 0.5, 'y': 0.37}
+                    background_normal: 'data/input_line.png'
+                    background_active: 'data/white.png'
                     text: app.nick
+            
+                Button:
+                    text: 'Connect'
+                    on_press: app.connect()
+                    size_hint: (4/6.8, 1/12)
+                    pos_hint: {'center_x': 0.5, 'y': 0.22}
 
-            Button:
-                text: 'Connect'
-                on_press: app.connect()
+        Label:
+            text: "Powered by The Elite"
+            pos: root.width/2 - 600/2, self.height/2 - 150/2 - 450*1.5
 
     Screen:
         name: 'chatroom'
 
         BoxLayout:
             orientation: 'vertical'
+
+            ScrollView:
+                ListView:
+                    ChatLabel:
+                        id: chat_logs
+                        text: ''
 
             BoxLayout:
                 height: 90
@@ -114,19 +141,15 @@ Builder.load_string("""
 
                 TextInput:
                     id: message
+                    hint_text: "Type a message"
                     on_text_validate: app.send_msg()
-
+                    
                 Button:
-                    text: 'Send'
+                    background_normal: "data/send-button.png"
+                    background_down: "data/send-button.png"
                     on_press: app.send_msg()
-                    size_hint: (0.3, 1)
-
-            ScrollView:
-                ChatLabel:
-                    id: chat_logs
-                    text: ''
+                    size_hint: (0.2, 1)
 """)
-
 
 def esc_markup(msg):
     return (msg.replace('&', '&amp;')
@@ -156,11 +179,8 @@ class ClientProtocol(asyncio.Protocol):
             for num, i in enumerate(text.split(':'), start=0):
                 if num == 0:
                     nickname = i
-                elif num == 1:
-                    msg += i
                 else:
-                    msg += ':' + i
-
+                    msg += i
             self.app.root.ids.chat_logs.text += (
             '[b][color=2980b9]{}:[/color][/b] {}\n'.format(nickname, esc_markup(msg))
             )
@@ -190,7 +210,7 @@ class ChatApp(App):
             with open(self.setting_file, 'r') as f:
                 text = f.read()
             self.setting_dict = json.loads(text)
-
+            
             self.host = self.setting_dict['host']
             self.nick = self.setting_dict['nick']
         except:
@@ -261,4 +281,10 @@ class ChatApp(App):
 
 
 if __name__ == '__main__':
+    Config.set('graphics', 'width', '600')
+    Config.set('graphics', 'height', '800')
+    Config.set('graphics', 'resizable', '1')
+    Config.set('graphics', 'borderless', '0')    
+    Config.set('graphics', 'window_state', 'visible')
+    
     ChatApp().run()
