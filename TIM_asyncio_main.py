@@ -110,7 +110,7 @@ Builder.load_string("""
                     background_normal: 'data/input_line.png'
                     background_active: 'data/white.png'
                     text: app.nick
-
+            
                 Button:
                     text: 'Connect'
                     on_press: app.connect()
@@ -127,6 +127,11 @@ Builder.load_string("""
         BoxLayout:
             orientation: 'vertical'
 
+            ScrollView:
+                ChatLabel:
+                    id: chat_logs
+                    text: ''
+
             BoxLayout:
                 height: 90
                 orientation: 'horizontal'
@@ -135,19 +140,15 @@ Builder.load_string("""
 
                 TextInput:
                     id: message
+                    hint_text: "Type a message"
                     on_text_validate: app.send_msg()
-
+                    
                 Button:
-                    text: 'Send'
+                    background_normal: "data/send-button.png"
+                    background_down: "data/send-button.png"
                     on_press: app.send_msg()
-                    size_hint: (0.3, 1)
-
-            ScrollView:
-                ChatLabel:
-                    id: chat_logs
-                    text: ''
+                    size_hint: (0.2, 1)
 """)
-
 
 def esc_markup(msg):
     return (msg.replace('&', '&amp;')
@@ -279,8 +280,8 @@ class ChatApp(App):
 
 
 if __name__ == '__main__':
-    Config.set('graphics', 'width', '720')
-    Config.set('graphics', 'height', '1280')
+    Config.set('graphics', 'width', '600')
+    Config.set('graphics', 'height', '800')
     Config.set('graphics', 'resizable', '1')
     Config.set('graphics', 'borderless', '0')    
     Config.set('graphics', 'window_state', 'visible')
