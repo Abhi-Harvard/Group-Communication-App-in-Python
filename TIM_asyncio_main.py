@@ -78,28 +78,21 @@ Builder.load_string("""
             orientation: 'vertical'
 
             canvas.before:
-                Color:
-                    rgba: 1, 1, 1, 1
                 Rectangle:
                     pos: self.pos
                     size: self.size
-                    source: "data/background.png"
+                    source: "data/background.jpg"
 
             FloatLayout:
                 canvas:
-                    Color:
-                        rgb: 1, 1, 1
                     Ellipse:
                         id: user_picture
                         pos: root.width/2 - 150/2, self.height/2 - 150/2 + 150*1.5
                         size: 150, 150
-                        source: 'data/yingshaoxo.png'
+                        source: 'data/gcomm-logo.png'
                         angle_start: 0
                         angle_end: 360
-                    Line:
-                        width: 2
-                        ellipse: (root.width/2 - 158/2, self.height/2 - 158/2 + 150*1.5, 158, 158, 0, 360)
-
+                    
                 TextInput:
                     id: server
                     hint_text: "Server IP"
@@ -123,6 +116,10 @@ Builder.load_string("""
                     on_press: app.connect()
                     size_hint: (4/6.8, 1/12)
                     pos_hint: {'center_x': 0.5, 'y': 0.22}
+
+        Label:
+            text: "Powered by The Elite"
+            pos: root.width/2 - 600/2, self.height/2 - 150/2 - 450*1.5
 
     Screen:
         name: 'chatroom'
@@ -282,7 +279,10 @@ class ChatApp(App):
 
 
 if __name__ == '__main__':
-    Config.set('graphics', 'width', '600')
-    Config.set('graphics', 'height', '900')
-
+    Config.set('graphics', 'width', '720')
+    Config.set('graphics', 'height', '1280')
+    Config.set('graphics', 'resizable', '1')
+    Config.set('graphics', 'borderless', '0')    
+    Config.set('graphics', 'window_state', 'visible')
+    
     ChatApp().run()
