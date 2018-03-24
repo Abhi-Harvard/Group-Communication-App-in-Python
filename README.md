@@ -4,15 +4,15 @@ A kivy based cross-platform application mini project for Distributed Systems sub
 ## Testing
 To run the app, first start the server
 
-'''
+```
 python3 server.py
-'''
+```
 
 Now run main.py
 
-'''
+```
 python3 main.py
-'''
+```
 
 ## License
 
