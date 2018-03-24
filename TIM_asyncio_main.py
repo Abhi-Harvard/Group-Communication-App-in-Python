@@ -128,9 +128,10 @@ Builder.load_string("""
             orientation: 'vertical'
 
             ScrollView:
-                ChatLabel:
-                    id: chat_logs
-                    text: ''
+                ListView:
+                    ChatLabel:
+                        id: chat_logs
+                        text: ''
 
             BoxLayout:
                 height: 90
@@ -209,7 +210,7 @@ class ChatApp(App):
             with open(self.setting_file, 'r') as f:
                 text = f.read()
             self.setting_dict = json.loads(text)
-
+            
             self.host = self.setting_dict['host']
             self.nick = self.setting_dict['nick']
         except:
